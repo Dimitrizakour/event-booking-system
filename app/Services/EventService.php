@@ -21,11 +21,9 @@ class EventService
         // Build a unique cache key
         $cacheKey = "events_page_{$page}_perPage_{$perPage}_search_{$search}_date_{$date}_location_{$location}";
 
-        // Cache with tags
-        return Cache::tags('events')->remember($cacheKey, 60, function () use ($filters, $perPage) {
-            $query = $this->repo->getAll($filters);
-
-            return $query->paginate($perPage);
+        // Cache
+        return Cache::remember($cacheKey, 60, function () use ($filters, $perPage) {
+            return $this->repo->getAll($filters);
         });
     }
 
@@ -38,18 +36,12 @@ class EventService
     {
         $event =  $this->repo->create(array_merge($dto->toArray(), ['created_by' => $userId]));
 
-        // Clear cached event lists
-        Cache::tags('events')->flush();
-
         return $event;
     }
 
     public function updateEvent($id, EventDTO $dto, $userId)
     {
         $event = $this->repo->updateById($id, array_merge($dto->toArray(), ['created_by' => $userId]));
-
-        // Clear cached event lists
-        Cache::tags('events')->flush();
 
         return $event;
     }
