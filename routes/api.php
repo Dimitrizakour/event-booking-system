@@ -34,8 +34,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Bookings
+    Route::middleware(['auth:sanctum', 'role:customer', 'double.booking'])
+        ->post('/tickets/{ticket_id}/bookings', [BookingController::class, 'store']);
+
     Route::middleware(['role:customer'])->group(function () {
-        Route::post('tickets/{id}/bookings', [BookingController::class, 'store']);
         Route::get('bookings', [BookingController::class, 'index']);
         Route::put('bookings/{id}/cancel', [BookingController::class, 'cancel']);
         Route::post('bookings/{id}/payment', [PaymentController::class, 'pay']);
