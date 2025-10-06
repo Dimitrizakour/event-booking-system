@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Booking;
+use App\Models\Event;
+use App\Models\Payment;
+use App\Models\Ticket;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +17,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Users
+        User::factory()->admin()->count(2)->create();
+        User::factory()->organizer()->count(3)->create();
+        User::factory()->customer()->count(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Events
+        Event::factory()->count(5)->create();
+
+        // Tickets
+        Ticket::factory()->count(15)->create();
+
+        // Bookings
+        Booking::factory()->count(20)->create();
+
+        // Payments
+        Payment::factory()->count(20)->create();
     }
 }
