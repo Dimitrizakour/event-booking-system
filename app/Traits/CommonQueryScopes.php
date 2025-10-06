@@ -28,4 +28,16 @@ trait CommonQueryScopes
 
         return $query;
     }
+    /**
+     * Scope to search results by location column.
+     */
+    public function scopeSearchByLocation(Builder $query, ?string $location, string $column = 'location'): Builder
+    {
+        if ($location) {
+            $query->where($column, 'like', "%{$location}%");
+        }
+
+        return $query;
+    }
+
 }
