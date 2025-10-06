@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\BookingDTO;
+use App\Notifications\BookingConfirmed;
 use App\Repositories\BookingRepository;
 
 class BookingService
@@ -11,7 +12,9 @@ class BookingService
 
     public function createBooking(BookingDTO $dto)
     {
-        return $this->repo->create($dto);
+        $booking= $this->repo->create($dto);
+        $booking->user->notify(new BookingConfirmed($booking));
+        return $booking;
     }
 
     public function listUserBookings(int $user_id)
